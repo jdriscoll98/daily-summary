@@ -29,7 +29,7 @@ def main():
     args = parser.parse_args()
     print("Generating daily development report...")
     print("Extracting git data...")
-    extract_git_data(args.repo, args.author)  # Example usage
+    extract_git_data(args.repo, args.author if args.author is not None else None, args.infer_author)  # Example usage
     print("Summarizing diffs...")
     summarize_all_diffs()
     print("Generating daily summary...")
