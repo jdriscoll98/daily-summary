@@ -11,9 +11,9 @@ client.api_key = os.environ["OPENAI_API_KEY"]
 date = datetime.now().date()
 
 
-def daily_summary(summaries):
+def daily_summary(summaries, model_name="gpt-4"):
     response = client.chat.completions.create(
-        model="gpt-4",
+        model=model_name,
         messages=[
             {
                 "role": "system",
@@ -33,13 +33,13 @@ def daily_summary(summaries):
     return response.choices[0].message.content
 
 
-def generate(date):
+def generate(date, model_name):
     # Read the diffs from the JSON file
     with open("summaries.txt", "r") as file:
         summaries = file.read()
 
     # Summarize the diffs
-    report = daily_summary(summaries)
+    report = daily_summary(summaries, model_name)
 
     # make a direcrory for the daily summary if it doesn't exist
     if not os.path.exists("daily-summaries"):
