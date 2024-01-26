@@ -4,6 +4,7 @@ from .summarize_diff import summarize_all_diffs
 from .git_data_extract import extract_git_data
 import os
 
+
 def main():
     parser = argparse.ArgumentParser(description="Generate daily development reports.")
     parser.add_argument(
