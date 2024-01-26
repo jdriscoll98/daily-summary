@@ -46,5 +46,5 @@ def generate(date):
         os.makedirs("daily-summary")
 
     # Writing daily summary to a file named after the date
-    with open(f"daily-summary/{date.strftime('%Y-%m-%d')}.md", "w") as file:
+    with open(f"daily-summaries/{date.strftime('%Y-%m-%d')}.md", "w") as file:
         file.write(report)

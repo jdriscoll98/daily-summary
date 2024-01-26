@@ -19,11 +19,9 @@ def main():
         required=True,
     )
     # Add arguments as needed. For example:
-    parser.add_argument('--date', help='Date for the report in YYYY-MM-DD format', default=None)
+    parser.add_argument('--date', help='Date for the report in YYYY-MM-DD format', default=datetime.now().date().strftime("%Y-%m-%d"))
 
     args = parser.parse_args()
-    if args.date is None:
-        args.date = datetime.now().date()
     print("Generating daily development report...")
     print("Extracting git data...")
     extract_git_data(args.repo, args.author, args.date)  # Pass date to extract_git_data
@@ -35,3 +33,6 @@ def main():
     os.remove("diffs.json")
     os.remove("summaries.txt")
     print("Done!")
+
+if __name__ == "__main__":
+    main()

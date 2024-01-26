@@ -7,15 +7,12 @@ import json
 def extract_git_data(repo_path, author, date):
     repo = git.Repo(repo_path)
 
-    today = datetime.now().date()
-
     first_commit = list(repo.iter_commits())[-1].hexsha
 
     diffs = []
     for commit in repo.iter_commits():
-        commit_date = commit.authored_datetime.date()
-
-        if commit_date == today and commit.author.name == author:
+        commit_date = commit.authored_datetime.date().strftime("%Y-%m-%d")
+        if commit_date == date and commit.author.name == author:
             diff_data = {
                 "commit_hash": commit.hexsha,
                 "author": commit.author.name,
