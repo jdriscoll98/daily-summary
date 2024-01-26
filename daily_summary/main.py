@@ -3,10 +3,14 @@ from .generate_daily_summary import generate
 from .summarize_diff import summarize_all_diffs
 from .git_data_extract import extract_git_data
 import os
+import sys
 
 
 def main():
     parser = argparse.ArgumentParser(description="Generate daily development reports.")
+    if os.environ.get('OPENAI_API_KEY') is None:
+        sys.stderr.write('Error: OPENAI_API_KEY environment variable is not set. Please set the variable and try again.\n')
+        sys.exit(1)
     parser.add_argument(
         "--repo",
         help="Path to the repository to generate the report for",
