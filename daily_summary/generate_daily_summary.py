@@ -33,17 +33,18 @@ def daily_summary(summaries):
     return response.choices[0].message.content
 
 
-# Read the diffs from the JSON file
-with open("summaries.txt", "r") as file:
-    summaries = file.read()
+def generate():
+    # Read the diffs from the JSON file
+    with open("summaries.txt", "r") as file:
+        summaries = file.read()
 
-# Summarize the diffs
-report = daily_summary(summaries)
+    # Summarize the diffs
+    report = daily_summary(summaries)
 
-# make a direcrory for the daily summary if it doesn't exist
-if not os.path.exists("daily-summary"):
-    os.makedirs("daily-summary")
+    # make a direcrory for the daily summary if it doesn't exist
+    if not os.path.exists("daily-summaries"):
+        os.makedirs("daily-summary")
 
-# Writing daily summary to a file named after the date
-with open(f"daily-summary/{date}.md", "w") as file:
-    file.write(report)
+    # Writing daily summary to a file named after the date
+    with open(f"daily-summary/{date}.md", "w") as file:
+        file.write(report)

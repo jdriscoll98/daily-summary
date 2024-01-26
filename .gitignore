@@ -1,5 +1,9 @@
 venv
 .env
 diffs.json
-daily-summary
+daily-summaries
+daily_summary.egg-info
 summaries.txt
+dist
+__pycache__
+build
