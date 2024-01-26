@@ -25,7 +25,7 @@ def daily_summary(summaries, model_name="gpt-4"):
             },
         ],
         temperature=1,
-        max_tokens=256,
+        max_tokens=1000,
         top_p=1,
         frequency_penalty=0,
         presence_penalty=0,
@@ -43,8 +43,8 @@ def generate(date, model_name):
 
     # make a direcrory for the daily summary if it doesn't exist
     if not os.path.exists("daily-summaries"):
-        os.makedirs("daily-summary")
+        os.makedirs("daily-summaries")
 
     # Writing daily summary to a file named after the date
-    with open(f"daily-summaries/{date.strftime('%Y-%m-%d')}.md", "w") as file:
+    with open(f"daily-summaries/{date}.md", "w") as file:
         file.write(report)

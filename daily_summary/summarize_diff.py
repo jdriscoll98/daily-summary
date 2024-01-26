@@ -9,7 +9,6 @@ client.api_key = os.environ["OPENAI_API_KEY"]
 
 
 def summarize_diff(diff, model_name="gpt-4"):
-    print(model_name)
     response = client.chat.completions.create(
         model=model_name,
         messages=[
