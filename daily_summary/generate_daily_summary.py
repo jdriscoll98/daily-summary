@@ -11,9 +11,9 @@ client.api_key = os.environ["OPENAI_API_KEY"]
 date = datetime.now().date()
 
 
-def daily_summary(summaries):
+def daily_summary(summaries, model_name="gpt-4"):
     response = client.chat.completions.create(
-        model="gpt-4",
+        model=model_name,
         messages=[
             {
                 "role": "system",
