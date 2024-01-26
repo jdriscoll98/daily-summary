@@ -1,6 +1,7 @@
 import git
 from datetime import datetime
 import json
+from collections import set
 
 
 # Replace with your repository's path
@@ -11,9 +12,15 @@ def extract_git_data(repo_path, author):
 
     first_commit = list(repo.iter_commits())[-1].hexsha
 
+    seen_commits = set()
     diffs = []
-    for commit in repo.iter_commits():
-        commit_date = commit.authored_datetime.date()
+    for branch in repo.branches:
+        for commit in repo.iter_commits(branch):
+            if commit.hexsha in seen_commits:
+                continue
+            seen_commits.add(commit.hexsha)
+
+            commit_date = commit.authored_datetime.date()
 
         if commit_date == today and commit.author.name == author:
             diff_data = {
