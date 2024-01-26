@@ -33,7 +33,7 @@ def daily_summary(summaries):
     return response.choices[0].message.content
 
 
-def generate():
+def generate(date):
     # Read the diffs from the JSON file
     with open("summaries.txt", "r") as file:
         summaries = file.read()
@@ -46,5 +46,5 @@ def generate():
         os.makedirs("daily-summary")
 
     # Writing daily summary to a file named after the date
-    with open(f"daily-summary/{date}.md", "w") as file:
+    with open(f"daily-summaries/{date.strftime('%Y-%m-%d')}.md", "w") as file:
         file.write(report)
