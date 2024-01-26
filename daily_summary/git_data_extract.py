@@ -4,7 +4,7 @@ import json
 
 
 # Replace with your repository's path
-def extract_git_data(repo_path, author):
+def extract_git_data(repo_path, author, date):
     repo = git.Repo(repo_path)
 
     today = datetime.now().date()
