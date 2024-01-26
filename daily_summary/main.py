@@ -10,15 +10,21 @@ def main():
     parser.add_argument(
         "--repo",
         help="Path to the repository to generate the report for",
-        required=True,
+        required=False,
     )
     parser.add_argument(
         "--author",
         help="Name of the author to generate the report for",
-        required=True,
+        required=False,
     )
     # Add arguments as needed. For example:
     # parser.add_argument('--date', help='Date for the report', required=True)
+    parser.add_argument(
+        "--infer-author",
+        help="Infer the author name from the local git configuration",
+        action='store_true',
+        required=False
+    )
 
     args = parser.parse_args()
     print("Generating daily development report...")
