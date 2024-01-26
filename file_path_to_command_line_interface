@@ -1,0 +1,25 @@
+import argparse
+from daily_summary.generate_daily_summary import daily_summary
+from daily_summary.summarize_diff import summarize_diff
+
+def main():
+    parser = argparse.ArgumentParser(description='Generate a summary of your commit history for the day.')
+    parser.add_argument('--repo', required=True, help='relative/path/to/your/repo')
+    parser.add_argument('--author', help='Author Name')
+    parser.add_argument('--model', default='gpt-4', help='OpenAI model to be used for generating summaries')
+    
+    args = parser.parse_args()
+    
+    model_name = args.model
+    # Assuming that the code to retrieve summaries and diffs is already implemented
+    summaries = get_summaries(args.repo, args.author)
+    diffs = get_diffs(args.repo, args.author)
+    
+    daily_summary_output = daily_summary(summaries, model_name=model_name)
+    summarize_diff_output = summarize_diff(diffs, model_name=model_name)
+    
+    # Assuming that the code to output or process the summary and diff outputs is already implemented
+    process_output(daily_summary_output, summarize_diff_output)
+
+if __name__ == "__main__":
+    main()
