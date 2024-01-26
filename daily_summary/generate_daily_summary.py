@@ -33,13 +33,13 @@ def daily_summary(summaries, model_name="gpt-4"):
     return response.choices[0].message.content
 
 
-def generate(date):
+def generate(date, model_name):
     # Read the diffs from the JSON file
     with open("summaries.txt", "r") as file:
         summaries = file.read()
 
     # Summarize the diffs
-    report = daily_summary(summaries)
+    report = daily_summary(summaries, model_name)
 
     # make a direcrory for the daily summary if it doesn't exist
     if not os.path.exists("daily-summaries"):
