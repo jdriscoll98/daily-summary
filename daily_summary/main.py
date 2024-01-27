@@ -29,12 +29,9 @@ def main():
     args = parser.parse_args()
     print("Generating daily development report...")
     print("Extracting git data...")
-    extract_git_data(args.repo, args.author if args.author is not None else None, args.infer_author)  # Example usage
+    diffs = extract_git_data(args.repo, args.author if args.author is not None else None, args.infer_author)  # Example usage
     print("Summarizing diffs...")
-    summarize_all_diffs()
+    summaries = summarize_all_diffs(diffs)
     print("Generating daily summary...")
-    generate()
-    # clean up the diffs.json file and summaries.txt file
-    os.remove("diffs.json")
-    os.remove("summaries.txt")
+    generate(summaries)
     print("Done!")

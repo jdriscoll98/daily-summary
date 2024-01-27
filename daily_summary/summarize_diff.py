@@ -28,17 +28,14 @@ def summarize_diff(diff):
     )
     return response.choices[0].message.content
 
-def summarize_all_diffs():
-    # Read the diffs from the JSON file
-    with open('diffs.json', 'r') as file:
-        diffs = json.load(file)
-
+def summarize_all_diffs(diffs):
     # Summarize the diffs
-    with open('summaries.txt', 'w') as summary_file:
-        for i, diff_data in tqdm(enumerate(diffs, start=1)):
-            diff_summary = summarize_diff(diff_data['diff'])
-            summary_file.write(f"{i}. Commit: {diff_data['commit_hash']}\n")
-            summary_file.write(f"   Date: {diff_data['date']}\n")
-            summary_file.write(f"   Message: {diff_data['message']}\n")
-            summary_file.write(f"   Key Changes: {diff_summary}\n")
-            summary_file.write('-' * 40 + '\n')
+    summaries = ''
+    for i, diff_data in tqdm(enumerate(diffs, start=1)):
+        diff_summary = summarize_diff(diff_data['diff'])
+        summary_file += (f"{i}. Commit: {diff_data['commit_hash']}\n")
+        summary_file += (f"   Date: {diff_data['date']}\n")
+        summary_file += (f"   Message: {diff_data['message']}\n")
+        summary_file += (f"   Key Changes: {diff_summary}\n")
+        summary_file += ('-' * 40 + '\n')
+    return summaries
