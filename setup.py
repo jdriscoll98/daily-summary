@@ -9,6 +9,7 @@ setup(
         "openai",
         "gitpython",
         "python-dotenv",
+        "twine",
     ],
     python_requires=">=3.11",
     # Additional metadata about your package
