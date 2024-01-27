@@ -23,6 +23,7 @@ setup(
         "console_scripts": [
             "daily-summary=daily_summary.main:main",
             "publish=daily_summary.publish:main",
+            "test=pytest:main",
         ],
     },
 )
