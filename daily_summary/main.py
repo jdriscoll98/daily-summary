@@ -8,7 +8,10 @@ import sys
 from openai import OpenAI
 
 client = OpenAI()
-client.api_key = os.environ["OPENAI_API_KEY"]
+def get_openai_api_key():
+    return os.environ.get("OPENAI_API_KEY")
+
+client.api_key = get_openai_api_key()
 
 def extract_git_data(repo_path, author, date):
     repo = git.Repo(repo_path)
@@ -21,11 +24,13 @@ def extract_git_data(repo_path, author, date):
         logging.error(
             "Author name could not be inferred from local git configuration and was not provided as an argument."
         )
-        exit(1)
+        raise ValueError(
+            "Author name could not be inferred from local git configuration and was not provided as an argument."
+        )
 
     seen_commits = set()
     diffs = []
-    print(repo.branches)
+    logging.info(f"Current branches: {repo.branches}")
     
     for branch in repo.branches:
         for commit in repo.iter_commits():
