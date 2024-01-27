@@ -7,13 +7,12 @@ from datetime import datetime
 client = OpenAI()
 client.api_key = os.environ["OPENAI_API_KEY"]
 
-
 date = datetime.now().date()
 
 
-def daily_summary(summaries):
+def daily_summary(summaries, model_name="gpt-4"):
     response = client.chat.completions.create(
-        model="gpt-4",
+        model=model_name,
         messages=[
             {
                 "role": "system",
@@ -25,7 +24,7 @@ def daily_summary(summaries):
             },
         ],
         temperature=1,
-        max_tokens=256,
+        max_tokens=1000,
         top_p=1,
         frequency_penalty=0,
         presence_penalty=0,
@@ -33,7 +32,7 @@ def daily_summary(summaries):
     return response.choices[0].message.content
 
 
-def generate(summaries):
+def generate(summaries, date, model_name):
     # Summarize the diffs
-    report = daily_summary(summaries)
+    report = daily_summary(summaries, date, model_name)
     print(report);

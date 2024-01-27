@@ -5,10 +5,8 @@ import logging
 
 
 # Replace with your repository's path
-def extract_git_data(repo_path, author=None):
+def extract_git_data(repo_path, author, date):
     repo = git.Repo(repo_path)
-
-    today = datetime.now().date()
 
     first_commit = list(repo.iter_commits())[-1].hexsha
 
@@ -20,9 +18,8 @@ def extract_git_data(repo_path, author=None):
 
 
     for commit in repo.iter_commits():
-        commit_date = commit.authored_datetime.date()
-
-        if commit_date == today and commit.author.name == author:
+        commit_date = commit.authored_datetime.date().strftime("%Y-%m-%d")
+        if commit_date == date and commit.author.name == author:
             diff_data = {
                 "commit_hash": commit.hexsha,
                 "author": commit.author.name,
@@ -35,3 +32,13 @@ def extract_git_data(repo_path, author=None):
             diffs.append(diff_data)
 
     return diffs
+
+def get_local_git_author(repo_path):
+    try:
+        repo = git.Repo(repo_path, search_parent_directories=True)
+        config_reader = repo.config_reader()
+        author_name = config_reader.get_value('user', 'name', None)
+        return author_name
+    except (git.exc.InvalidGitRepositoryError, git.exc.NoSuchPathError, git.exc.GitCommandError, KeyError):
+        logging.error("Could not retrieve the author name from the local git configuration.")
+        return None
