@@ -27,7 +27,7 @@ def write_new_version(new_version):
 def build_package():
     result = subprocess.run(['python3', 'setup.py', 'sdist', 'bdist_wheel'], capture_output=True, text=True)
     if result.returncode != 0:
-        raise RuntimeError(f"Building package failed: {result.stderr}")
+        raise RuntimeError(f"Building package failed: {result.stdout}")
 
 def publish_package():
     username = os.environ.get('PYPI_USERNAME', '__token__')
@@ -36,7 +36,7 @@ def publish_package():
         raise RuntimeError('PYPI_TOKEN environment variable is not set')
     result = subprocess.run(['twine', 'upload', 'dist/*', '-u', username, '-p', password], capture_output=True, text=True)
     if result.returncode != 0:
-        raise RuntimeError(f"Publishing package failed: {result.stderr}")
+        raise RuntimeError(f"Publishing package failed: {result.stdout}")
 
 if __name__ == "__main__":
     current_version = read_current_version()
