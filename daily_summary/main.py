@@ -135,7 +135,7 @@ def generate(summaries, author, date, model_name):
     return report
 
 
-def main():
+def parse_arguments():
     parser = argparse.ArgumentParser(description="Generate daily development reports.")
     if os.environ.get("OPENAI_API_KEY") is None:
         sys.stderr.write(
@@ -163,6 +163,10 @@ def main():
         help="OpenAI model to be used for generating summaries",
     )
     args = parser.parse_args()
+    return args
+
+def main():
+    args = parse_arguments()
     print("Generating daily development report...")
     print("Extracting git data...")
     diffs = extract_git_data(args.repo, args.author, args.date)
