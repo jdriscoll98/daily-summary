@@ -9,6 +9,7 @@ setup(
         "openai",
         "gitpython",
         "python-dotenv",
+        "pytest",
     ],
     python_requires=">=3.11",
     # Additional metadata about your package
