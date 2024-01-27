@@ -2,7 +2,7 @@
 
 Generate a summary of your commit history for the day.
 
-Usage:
+## Usage:
 export OPENAI_API_KEY=your-api-key
 
 daily-summary --repo relative/path/to/your/repo --author "Author Name" --model <model-name>
@@ -11,3 +11,11 @@ daily-summary --repo relative/path/to/your/repo --author "Author Name" --model <
 --date is optional but lets you create reports for different dates than today
   
   "Author Name" should match your git commit author name
+
+## Publishing:
+
+Build the package: python3 setup.py sdist bdist_wheel
+Install Twine: pip install twine
+Upload to PyPi: twine upload dist/* 
+username = \__token__
+password = PYPI_TOKEN
