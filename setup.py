@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="daily-summary",
-    version="0.1.4",
+    version="0.1.20",
     packages=find_packages(),
     install_requires=[
         # List your project dependencies here
@@ -21,6 +21,7 @@ setup(
     entry_points={
         "console_scripts": [
             "daily-summary=daily_summary.main:main",
+            "publish=daily_summary.publish:main",
         ],
     },
 )

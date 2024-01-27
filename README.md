@@ -14,8 +14,15 @@ daily-summary --repo relative/path/to/your/repo --author "Author Name" --model <
 
 ## Publishing:
 
-Build the package: python3 setup.py sdist bdist_wheel
-Install Twine: pip install twine
-Upload to PyPi: twine upload dist/* 
+Build the package:
+
+python3 publish.py 
+
+OR
+
+python3 setup.py sdist bdist_wheel
+Update the version number in setup.py
+pip install twine
+twine upload dist/* 
 username = \___token__
 password = PYPI_TOKEN
