@@ -23,19 +23,30 @@ def extract_git_data(repo_path, author, date):
         )
         exit(1)
 
-    for commit in repo.iter_commits():
-        commit_date = commit.authored_datetime.date().strftime("%Y-%m-%d")
-        if commit_date == date and commit.author.name == author:
-            diff_data = {
-                "commit_hash": commit.hexsha,
-                "author": commit.author.name,
-                "date": str(commit.authored_datetime),
-                "message": commit.message.strip(),
-                "diff": repo.git.diff(commit.hexsha + "^", commit.hexsha)
-                if first_commit != commit.hexsha
-                else "First Commit",
-            }
-            diffs.append(diff_data)
+    seen_commits = set()
+    diffs = []
+    print(repo.branches)
+    
+    for branch in repo.branches:
+        for commit in repo.iter_commits():
+            if commit.hexsha in seen_commits:
+                continue
+            seen_commits.add(commit.hexsha)
+
+            commit_date = commit.authored_datetime.date()
+            commit_date = commit.authored_datetime.date().strftime("%Y-%m-%d")
+            if commit_date == date and commit.author.name == author:
+                diff_data = {
+                    "branch": branch.name,
+                    "commit_hash": commit.hexsha,
+                    "author": commit.author.name,
+                    "date": str(commit.authored_datetime),
+                    "message": commit.message.strip(),
+                    "diff": repo.git.diff(commit.hexsha + "^", commit.hexsha)
+                    if first_commit != commit.hexsha
+                    else "First Commit",
+                }
+                diffs.append(diff_data)
 
     return diffs
 
@@ -87,6 +98,7 @@ def summarize_all_diffs(diffs, model_name):
     for i, diff_data in tqdm(enumerate(diffs, start=1)):
         diff_summary = summarize_diff(diff_data["diff"], model_name)
         summaries += f"{i}. Commit: {diff_data['commit_hash']}\n"
+        summaries += f"   Branch: {diff_data['branch']}\n"
         summaries += f"   Date: {diff_data['date']}\n"
         summaries += f"   Message: {diff_data['message']}\n"
         summaries += f"   Key Changes: {diff_summary}\n"
@@ -154,6 +166,9 @@ def main():
     print("Generating daily development report...")
     print("Extracting git data...")
     diffs = extract_git_data(args.repo, args.author, args.date)
+    if not diffs:
+        print("No diffs found for the given date and author.")
+        exit(0)
     print("Summarizing diffs...")
     summaries = summarize_all_diffs(diffs, args.model)
     print("Generating daily summary...")
