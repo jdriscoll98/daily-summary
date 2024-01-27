@@ -135,9 +135,15 @@ def generate(summaries, author, date, model_name):
     return report
 
 
+def check_openai_api_key():
+    return os.getenv("OPENAI_API_KEY") is not None
+
+client.api_key = os.getenv("OPENAI_API_KEY")
+
+
 def main():
     parser = argparse.ArgumentParser(description="Generate daily development reports.")
-    if os.environ.get("OPENAI_API_KEY") is None:
+    if not check_openai_api_key():
         sys.stderr.write(
             "Error: OPENAI_API_KEY environment variable is not set. Please set the variable and try again.\n"
         )
