@@ -9,6 +9,7 @@ setup(
         "openai",
         "gitpython",
         "python-dotenv",
+        "pytest",
     ],
     python_requires=">=3.11",
     # Additional metadata about your package
@@ -22,6 +23,7 @@ setup(
         "console_scripts": [
             "daily-summary=daily_summary.main:main",
             "publish=daily_summary.publish:main",
+            "test=pytest:main",
         ],
     },
 )
