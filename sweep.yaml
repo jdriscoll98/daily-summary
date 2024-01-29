@@ -1,23 +1,13 @@
-# Sweep AI turns bugs & feature requests into code changes (https://sweep.dev)
-# For details on our config file, check out our docs at https://docs.sweep.dev/usage/config
-
-# This setting contains a list of rules that Sweep will check for. If any of these rules are broken in a new commit, Sweep will create an pull request to fix the broken rule.
-# rules:
-
-# This is the branch that Sweep will develop from and make pull requests to. Most people use 'main' or 'master' but some users also use 'dev' or 'staging'.
 branch: "main"
-
-# By default Sweep will read the logs and outputs from your existing Github Actions. To disable this, set this to false.
 gha_enabled: True
-
-# This is the description of your project. It will be used by sweep when creating PRs. You can tell Sweep what's unique about your project, what frameworks you use, or anything else you want.
-#
-# Example:
-#
-description: "A program to generate a daily summary of your commit history"
-
-# This sets whether to create pull requests as drafts. If this is set to True, then all pull requests will be created as drafts and GitHub Actions will not be triggered.
-draft: False
-
-# This is a list of directories that Sweep will not be able to edit.
 blocked_dirs: ["licenses"]
+draft: False
+description: "daily-summary/daily_summary is a python 3.10 project. The main function is in daily-summary/daily_summary/main.py. All code should be written in the main.py file. Write unit tests in the tests directory as their corresponding code, i.e. daily-summary/tests/main_test.py tests daily-summary/daily_summary/main.py. We use pytest for tests. Use list and tuple for typing instead of typing.List and typing.Tuple."
+
+rules:
+  - "There should be no debug log or print statements in production code."
+  - "All functions should have parameters and output annotated with type hints. Use list, tuple and dict instead of typing.List, typing.Tuple and typing.dict."
+  - "Leftover TODOs in the code should be handled."
+  - "All new business logic should have corresponding unit tests in the tests directory. For example, daily-summary/tests/main_test.py tests daily-summary/daily_summary/main.py. Use unittest and unittest.mock as required."
+  - "Any clearly inefficient or repeated code should be optimized or refactored."
+  - "Remove any comments before code that are obvious. For example `# this prints hello world; print('hello world')`."
