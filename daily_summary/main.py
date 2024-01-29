@@ -137,11 +137,7 @@ def generate(summaries, author, date, model_name):
 
 def main():
     parser = argparse.ArgumentParser(description="Generate daily development reports.")
-    if os.environ.get("OPENAI_API_KEY") is None:
-        sys.stderr.write(
-            "Error: OPENAI_API_KEY environment variable is not set. Please set the variable and try again.\n"
-        )
-        sys.exit(1)
+    check_env()
     parser.add_argument(
         "--repo",
         help="Path to the repository to generate the report for",
@@ -177,6 +173,10 @@ def main():
     with open("daily_summary.md", "w") as f:
         f.write(report)
 
+def check_env():
+    if not os.environ.get("OPENAI_API_KEY"):
+        sys.stderr.write("Error: OPENAI_API_KEY environment variable is not set. Please set the variable and try again.\n")
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()
