@@ -187,7 +187,7 @@ def main():
     args = parser.parse_args()
     print("Generating daily development report...")
     print("Extracting git data...")
-    diffs = extract_git_data(args.repo, args.author, args.date)
+    diffs = extract_git_data(args.repo, args.author, args.date, start_date=args.start_date, end_date=args.end_date)
     if not diffs:
         print("No diffs found for the given date and author.")
         exit(0)
