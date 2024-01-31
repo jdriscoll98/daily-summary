@@ -158,6 +158,16 @@ def main():
         default="gpt-4",
         help="OpenAI model to be used for generating summaries",
     )
+    parser.add_argument(
+        "--start-date",
+        help="Start date for the report range in YYYY-MM-DD format, defaults to None",
+        default=None,
+    )
+    parser.add_argument(
+        "--end-date",
+        help="End date for the report range in YYYY-MM-DD format, defaults to None",
+        default=None,
+    )
     args = parser.parse_args()
     print("Generating daily development report...")
     print("Extracting git data...")
