@@ -47,10 +47,14 @@ def extract_git_data(repo_path, author, date, start_date=None, end_date=None):
                 "message": commit.message.strip(),
                 
             }
-        if first_commit != commit.hexsha:
-            diff_data["diff"] = repo.git.diff(commit.hexsha + "^", commit.hexsha)
-        else:
-            diff_data["diff"] = repo.git.show(commit.hexsha) 
+        try:
+            if first_commit != commit.hexsha:
+                diff_data["diff"] = repo.git.diff(commit.hexsha + "^", commit.hexsha)
+            else:
+                diff_data["diff"] = repo.git.show(commit.hexsha) 
+        except git.exc.GitCommandError:
+            logging.error(f"Could not retrieve the diff for commit {commit.hexsha}.")
+            continue
         if start_date and end_date and (start_date <= commit_date <= end_date) and commit.author.name == author:
             # If both start_date and end_date are provided, check if commit date is in the range
             diffs.append(diff_data)
