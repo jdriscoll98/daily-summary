@@ -13,9 +13,11 @@ client.api_key = os.environ["OPENAI_API_KEY"]
 def extract_git_data(repo_path, author, date, start_date=None, end_date=None):
     repo = git.Repo(repo_path)
 
+    commits = list(repo.iter_commits())
+    if not commits:
+        raise ValueError("No commits found in the repository.")
     first_commit = list(repo.iter_commits())[-1].hexsha
 
-    diffs = []
     author = author if author is not None else get_local_git_author(repo_path)
     if not author:
         logging.error(
@@ -24,45 +26,42 @@ def extract_git_data(repo_path, author, date, start_date=None, end_date=None):
         exit(1)
 
     seen_commits = set()
-    first_commit_hash = list(repo.iter_commits())[-1].hexsha
-    first_commit_date = list(repo.iter_commits())[-1].authored_datetime.date()
     diffs = []
-    print(repo.branches)
-    
+    if start_date is not None:
+        start_date = datetime.strptime(start_date, "%Y-%m-%d").date()
+    if end_date is not None:
+        end_date = datetime.strptime(end_date, "%Y-%m-%d").date()
+    date = datetime.strptime(date, "%Y-%m-%d").date()
     # Convert start_date and end_date from string to date objects only once
-    start_date = datetime.strptime(start_date, "%Y-%m-%d").date() if start_date else first_commit_date
-    end_date = datetime.strptime(end_date, "%Y-%m-%d").date() if end_date else datetime.now().date()
-    for branch in repo.branches:
-        for commit in repo.iter_commits():
-            if commit.hexsha in seen_commits:
-                continue
-            seen_commits.add(commit.hexsha)
+    for commit in repo.iter_commits():
+        if commit.hexsha in seen_commits:
+            continue
+        seen_commits.add(commit.hexsha)
 
-            commit_date = commit.authored_datetime.date()
-            if start_date is not None:
-                start_date = datetime.strptime(start_date, "%Y-%m-%d").date()
-            if end_date is not None:
-                end_date = datetime.strptime(end_date, "%Y-%m-%d").date()
-            if start_date and end_date and (start_date <= commit_date <= end_date) and commit.author.name == author:
-                # If both start_date and end_date are provided, check if commit date is in the range
-                pass
-            elif not start_date and commit_date == date and commit.author.name == author:
-                # If start_date is None, behave as before
-                pass
-            elif not end_date and commit_date == date and commit.author.name == author:
-                # If end_date is None, behave as before
-                pass
-                diff_data = {
-                    "branch": branch.name,
-                    "commit_hash": commit.hexsha,
-                    "author": commit.author.name,
-                    "date": str(commit.authored_datetime),
-                    "message": commit.message.strip(),
-                    "diff": repo.git.diff(commit.hexsha + "^", commit.hexsha)
-                    if first_commit != commit.hexsha
-                    else "First Commit",
-                }
-                diffs.append(diff_data)
+
+        commit_date = commit.authored_datetime.date()
+        diff_data = {
+                "commit_hash": commit.hexsha,
+                "author": commit.author.name,
+                "date": str(commit.authored_datetime),
+                "message": commit.message.strip(),
+                "diff": repo.git.diff(commit.hexsha + "^", commit.hexsha)
+                if first_commit != commit.hexsha
+                else "First Commit",
+            }
+        if start_date and end_date and (start_date <= commit_date <= end_date) and commit.author.name == author:
+            # If both start_date and end_date are provided, check if commit date is in the range
+            diffs.append(diff_data)
+        elif not start_date and end_date and commit_date <= end_date and commit.author.name == author:
+            # If start_date is None, do up to end_date
+            diffs.append(diff_data)
+        elif not end_date and start_date and commit_date >= start_date and commit.author.name == author:
+            # If end_date is None, do from start_date
+            diffs.append(diff_data)
+        elif not start_date and not end_date and commit_date == date and commit.author.name == author:
+            # If both start_date and end_date are None, behave as before
+            diffs.append(diff_data)
+           
 
     return diffs
 
