@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="daily-summary",
-    version="0.1.20",
+    version="0.1.25",
     packages=find_packages(),
     install_requires=[
         # List your project dependencies here
@@ -11,7 +11,7 @@ setup(
         "python-dotenv",
         "pytest",
     ],
-    python_requires=">=3.11",
+    python_requires=">=3",
     # Additional metadata about your package
     author="Jack Driscoll",
     author_email="jackdriscoll777@gmail.com",

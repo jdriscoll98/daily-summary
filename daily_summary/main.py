@@ -45,10 +45,12 @@ def extract_git_data(repo_path, author, date, start_date=None, end_date=None):
                 "author": commit.author.name,
                 "date": str(commit.authored_datetime),
                 "message": commit.message.strip(),
-                "diff": repo.git.diff(commit.hexsha + "^", commit.hexsha)
-                if first_commit != commit.hexsha
-                else "First Commit",
+                
             }
+        if first_commit != commit.hexsha:
+            diff_data["diff"] = repo.git.diff(commit.hexsha + "^", commit.hexsha)
+        else:
+            diff_data["diff"] = repo.git.show(commit.hexsha) 
         if start_date and end_date and (start_date <= commit_date <= end_date) and commit.author.name == author:
             # If both start_date and end_date are provided, check if commit date is in the range
             diffs.append(diff_data)
